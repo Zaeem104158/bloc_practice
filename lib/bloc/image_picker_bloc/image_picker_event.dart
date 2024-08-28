@@ -8,7 +8,7 @@
 // }
 
 import 'package:equatable/equatable.dart';
-import 'package:flutter/material.dart';
+
 
 abstract class ImagePickerEvent extends Equatable {
   const ImagePickerEvent();
@@ -19,3 +19,5 @@ abstract class ImagePickerEvent extends Equatable {
 class PickImageFromCamera extends ImagePickerEvent {}
 
 class PickImageFromGallery extends ImagePickerEvent {}
+
+class PickImageMultipleFromGallery extends ImagePickerEvent {}

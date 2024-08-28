@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -27,6 +28,7 @@ class SwitchExample extends StatelessWidget {
               children: [
                 const Text("Notification"),
                 BlocBuilder<SwitchExampleBloc, SwitchExampleState>(
+                  buildWhen: (previous, current) => previous.isSwitch != current.isSwitch,
                     builder: (context, state) {
                   return Switch(
                     value: state.isSwitch,
@@ -43,7 +45,9 @@ class SwitchExample extends StatelessWidget {
               height: 30,
             ),
             BlocBuilder<SwitchExampleBloc, SwitchExampleState>(
+              buildWhen: (previous, current) => previous.slider != current.slider,
                 builder: (context, state) {
+                 
               return Container(
                 height: 200,
                 color: Colors.red.withOpacity(state.slider),
@@ -53,7 +57,9 @@ class SwitchExample extends StatelessWidget {
               height: 20,
             ),
             BlocBuilder<SwitchExampleBloc, SwitchExampleState>(
+                buildWhen: (previous, current) => previous.slider != current.slider,
                 builder: (context, state) {
+                  log("message");
               return Slider(
                 value: state.slider,
                 onChanged: (value) {
@@ -64,19 +70,30 @@ class SwitchExample extends StatelessWidget {
               );
             }),
             BlocBuilder<ImagePickerBloc, ImagePickerState>(
+                buildWhen: (previous, current) => previous.fileList != current.fileList,
               builder: (context, state) {
                 return state.file != null
-                    ? CircleAvatar(
-                        child: Image.file(File(state.file!.path)),
-                      )
+                    ? Image.file(File(state.file!.path),)
                     : InkWell(
                         onTap: () {
                           context
                               .read<ImagePickerBloc>()
-                              .add(PickImageFromCamera());
+                              .add(PickImageMultipleFromGallery());
                         },
                         child: const Icon(Icons.camera),
                       );
+              },
+            ),
+            BlocBuilder<ImagePickerBloc, ImagePickerState>(
+              builder: (context, state) {
+
+                  return state.fileList.isNotEmpty ? SizedBox(
+                    height: 300,
+                    child: ListView.builder(itemCount: state.fileList.length,itemBuilder:(_,index){
+                    return Image.file(File(state.fileList[index].path.toString()),);
+                                    }),
+                  ): const SizedBox.shrink();
+                    
               },
             )
           ],

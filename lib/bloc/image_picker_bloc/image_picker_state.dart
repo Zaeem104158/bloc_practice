@@ -12,14 +12,23 @@
 import 'package:equatable/equatable.dart';
 import 'package:image_picker/image_picker.dart';
 
-class ImagePickerState extends Equatable{
+class ImagePickerState extends Equatable {
   final XFile? file;
-  const ImagePickerState({this.file});
-  ImagePickerState copyWith({XFile? file}){
-    return ImagePickerState(file: file ?? this.file);
-  }
-  @override
-  // TODO: implement props
-  List<Object?> get props => [file];
+  final List<XFile> fileList;
 
+  // Constructor with a default value for fileList
+  ImagePickerState({this.file, List<XFile>? fileList})
+      : fileList = fileList ?? []; // Default to an empty list if fileList is null
+
+  // Method to create a new instance with modified properties
+  ImagePickerState copyWith({XFile? file, List<XFile>? fileList}) {
+    return ImagePickerState(
+      file: file ?? this.file,
+      fileList: fileList ?? this.fileList,
+    );
+  }
+
+  // List of properties for value comparison
+  @override
+  List<Object?> get props => [file, fileList];
 }

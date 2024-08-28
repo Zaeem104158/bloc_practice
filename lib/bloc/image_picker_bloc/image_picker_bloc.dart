@@ -20,8 +20,10 @@ import 'package:todo/utlis/image_picker_utils.dart';
 
 class ImagePickerBloc extends Bloc<ImagePickerEvent, ImagePickerState> {
   final ImagePickerUtils imagePickerUtils;
-  ImagePickerBloc(this.imagePickerUtils) : super(const ImagePickerState()) {
+  ImagePickerBloc(this.imagePickerUtils) : super( ImagePickerState()) {
     on<PickImageFromCamera>(_pickImageFromCamera);
+    on<PickImageFromGallery>(_pickImageFromGallery);
+    on<PickImageMultipleFromGallery>(_pickMultipleImageFromGallery);
   }
 
   void _pickImageFromCamera(
@@ -29,6 +31,20 @@ class ImagePickerBloc extends Bloc<ImagePickerEvent, ImagePickerState> {
     XFile? file = await imagePickerUtils.cameraCapture();
     emit(
       state.copyWith(file: file),
+    );
+  }
+    void _pickImageFromGallery(
+      ImagePickerEvent event, Emitter<ImagePickerState> emit) async {
+    XFile? file = await imagePickerUtils.pickImageFromGallery();
+    emit(
+      state.copyWith(file: file),
+    );
+}
+  void _pickMultipleImageFromGallery(
+      ImagePickerEvent event, Emitter<ImagePickerState> emit) async {
+    List<XFile> images = await imagePickerUtils.pickMultipleImageFromGallery();
+    emit(
+      state.copyWith(fileList: images),
     );
   }
 }
